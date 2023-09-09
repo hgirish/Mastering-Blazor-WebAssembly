@@ -1,4 +1,8 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.Components.WebAssembly.Hosting
+
+@inject IConfiguration Configuration
+@inject IWebAssemblyHostEnvironment Host
 
 <PageTitle>Index</PageTitle>
 
@@ -6,4 +10,9 @@
 
 Welcome to your new app.
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+<p>Api Url: @Configuration["ApiUrl"]</p>
+
+@if (!Host.IsDevelopment())
+{
+    <SurveyPrompt Title="How is Blazor working for you?" />
+}
