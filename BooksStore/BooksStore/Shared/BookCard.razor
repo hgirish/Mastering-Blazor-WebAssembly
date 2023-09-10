@@ -1,5 +1,5 @@
 ﻿
-<div style="border:1px solid black; padding: 5px"
+<div style="border:1px solid black; padding: 5px;@BackgroundStyle"
 @attributes="UserAttributes">
     <h6>@Book?.Title</h6>
     <p>Author: @Book?.AuthorName</p>
@@ -23,6 +23,8 @@
 
     [Parameter]
     public EventCallback<Book?> OnAddToCartClicked { get; set; }
+    [CascadingParameter]
+    public string? BackgroundStyle { get; set; }
 
     private void AddToCart()
     {
