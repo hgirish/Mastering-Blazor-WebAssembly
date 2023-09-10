@@ -3,6 +3,7 @@
 
 @inject IConfiguration Configuration
 @inject IWebAssemblyHostEnvironment Host
+@inject IBooksService BooksService
 
 <PageTitle>Index</PageTitle>
 
@@ -10,9 +11,51 @@
 
 Welcome to your new app.
 
+
+
+<h3>Available Books</h3>
+<div style="display:flex">
+    @foreach (var book in _books)
+    {
+        <BookCard Book="book" 
+            OnAddToCartClicked="AddToCart"
+            />
+    }
+</div>
+
+<h3 class="mt-3">My Cart</h3>
+<ul>
+    @foreach (var item in _booksCart)
+    {
+        <li>@item.Title</li>
+    }
+</ul>
+
 <p>Api Url: @Configuration["ApiUrl"]</p>
 
 @if (!Host.IsDevelopment())
 {
     <SurveyPrompt Title="How is Blazor working for you?" />
+}
+
+@code {
+    private List<Book> _books = new List<Book>();
+    private List<Book> _booksCart = new List<Book>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _books = await BooksService.GetAllBooksAsync();
+    }
+    private Book? _firstBook
+    {
+        get
+        {
+            return _books.FirstOrDefault();
+        }
+    }
+
+    private void AddToCart(Book selectedBook)
+    {
+        _booksCart.Add(selectedBook);
+    }
 }
