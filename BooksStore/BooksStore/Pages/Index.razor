@@ -17,12 +17,15 @@ Welcome to your new app.
 <div style="display:flex">
     @foreach (var book in _books)
     {
+       
         <BookCard Book="book" 
             OnAddToCartClicked="AddToCart"
+           
             />
+            
     }
 </div>
-
+@*<BookCard Book="_nonExistent"></BookCard>*@
 <h3 class="mt-3">My Cart</h3>
 <ul>
     @foreach (var item in _booksCart)
@@ -41,7 +44,8 @@ Welcome to your new app.
 @code {
     private List<Book> _books = new List<Book>();
     private List<Book> _booksCart = new List<Book>();
-
+    private string? _backStyle ;
+   // private Book? _nonExistent;
     protected override async Task OnInitializedAsync()
     {
         _books = await BooksService.GetAllBooksAsync();

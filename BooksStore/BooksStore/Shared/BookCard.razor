@@ -1,12 +1,12 @@
 ﻿
-<div style="border:1px solid black; padding: 5px;@BackgroundStyle"
-@attributes="UserAttributes">
+<div style="@BackgroundStyle"
+@attributes="UserAttributes" class="card">
     <h6>@Book?.Title</h6>
     <p>Author: @Book?.AuthorName</p>
     <p>Publishing Date: @Book?.PublishingDate</p>
     @if (WithButton)
     {
-        <button style="width:100%"
+        <button class="main-button"
         @onclick="AddToCart"
         >Add to Cart</button>
     }
@@ -29,5 +29,33 @@
     private void AddToCart()
     {
         OnAddToCartClicked.InvokeAsync(Book);
+    }
+
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        if (parameters.TryGetValue<string>(nameof(BackgroundStyle), out var value))
+        {
+
+            if (string.IsNullOrWhiteSpace(value))
+            {
+
+                BackgroundStyle = "background-color:yellow";
+                Console.WriteLine($"background style value: {BackgroundStyle}");
+                
+            }
+
+        }
+        await base.SetParametersAsync(parameters);
+    }
+    // Validate the Book parameter and throws an exception
+    // if it's null
+    protected override void OnParametersSet()
+    {
+        if (Book == null)
+            throw new ArgumentNullException(nameof(Book));
+        else
+        {
+            Console.WriteLine(Book.Title);
+        }
     }
 }
