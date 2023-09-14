@@ -1,13 +1,15 @@
-﻿
+﻿@inject NavigationManager Navigation
+
 <div style="@BackgroundStyle"
-@attributes="UserAttributes" class="card">
+@attributes="UserAttributes" class="card"
+@onclick="NavigateToBookDetails" >
     <h6>@Book?.Title</h6>
     <p>Author: @Book?.AuthorName</p>
     <p>Publishing Date: @Book?.PublishingDate</p>
     @if (WithButton)
     {
         <button class="main-button"
-        @onclick="AddToCart"
+        @onclick="AddToCart" @onclick:stopPropagation="true"
         >Add to Cart</button>
     }
     
@@ -41,7 +43,7 @@
 
                 BackgroundStyle = "background-color:yellow";
                 Console.WriteLine($"background style value: {BackgroundStyle}");
-                
+
             }
 
         }
@@ -57,5 +59,11 @@
         {
             Console.WriteLine(Book.Title);
         }
+    }
+
+    private void NavigateToBookDetails()
+    {
+        var url = $"/book/{Book!.Id}";
+        Navigation.NavigateTo(url);
     }
 }

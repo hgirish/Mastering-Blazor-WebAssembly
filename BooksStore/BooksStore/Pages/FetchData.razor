@@ -45,7 +45,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
-        LoggingService.Log($"Number of items retrieved is {forecasts.Count()}");
+        LoggingService.Log($"Number of items retrieved is {forecasts?.Count()}");
     }
 
     public class WeatherForecast
