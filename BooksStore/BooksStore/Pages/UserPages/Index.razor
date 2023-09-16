@@ -4,6 +4,10 @@
 @inject IConfiguration Configuration
 @inject IWebAssemblyHostEnvironment Host
 @inject IBooksService BooksService
+@inject NavigationManager Navigation
+@implements IDisposable
+
+<NavigationLock ConfirmExternalNavigation="true" />
 
 <PageTitle>Index</PageTitle>
 
@@ -62,15 +66,19 @@ Welcome to your new app.
     </FooterContent>
 </ModalPopup>
 
+
+
 @code {
     private List<Book> _books = new List<Book>();
     private List<Book> _booksCart = new List<Book>();
-   // private string? _backStyle ;
+    // private string? _backStyle ;
     private bool _isWelcomeModalOpen = false;
 
     // private Book? _nonExistent;
     protected override async Task OnInitializedAsync()
     {
+        Navigation.LocationChanged += Navigation_LocationChanged;
+
         _books = await BooksService.GetAllBooksAsync();
     }
     private Book? _firstBook
@@ -85,4 +93,15 @@ Welcome to your new app.
     {
         _booksCart.Add(selectedBook);
     }
+
+    private void Navigation_LocationChanged(object? sender,
+        LocationChangedEventArgs e)
+    {
+        Console.WriteLine($"The location changed to {e.Location}");
+    }
+    public void Dispose()
+    {
+        Navigation.LocationChanged -= Navigation_LocationChanged;
+    }
+
 }

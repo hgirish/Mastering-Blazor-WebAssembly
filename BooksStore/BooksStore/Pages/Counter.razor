@@ -13,6 +13,9 @@
 @code {
     private int currentCount = 0;
     private Type componentType = typeof(SurveyPrompt);
+    [Parameter]
+    [SupplyParameterFromQuery(Name ="currentCount")]
+    public int? CounterInitialValue { get; set; }
 
     private void IncrementCount()
     {
@@ -23,4 +26,11 @@
     {
         {"Title","Welcome to Blazor"}        
     };
+    protected override void OnParametersSet()
+    {
+        if (CounterInitialValue != null)
+        {
+            currentCount = CounterInitialValue.Value;
+        }
+    }
 }

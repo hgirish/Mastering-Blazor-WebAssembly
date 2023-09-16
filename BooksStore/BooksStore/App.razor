@@ -6,7 +6,15 @@
     <NotFound>
         <PageTitle>Not found</PageTitle>
         <LayoutView Layout="@typeof(UserLayout)">
-            <p role="alert">Sorry, there's nothing at this address.</p>
+            <div style="text-align:center;margin-top:20px">
+                <h3>
+                    <span style="color:red">
+                        <strong>Oops!</strong>
+                    </span>
+                    Nothing can be found at this address
+                </h3>
+                <p>It looks like the page you requested in the URL cannot be found</p>
+            </div>
         </LayoutView>
     </NotFound>
 </Router>
