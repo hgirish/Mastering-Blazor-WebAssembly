@@ -5,6 +5,8 @@
 @inject IWebAssemblyHostEnvironment Host
 @inject IBooksService BooksService
 @inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+
 @implements IDisposable
 
 <NavigationLock ConfirmExternalNavigation="true" />
@@ -77,6 +79,17 @@ Welcome to your new app.
     // private Book? _nonExistent;
     protected override async Task OnInitializedAsync()
     {
+        // Call the JS import and pass the path of the
+        // external js path that will be placed in the
+        // wwwroot folder that will load only the JS
+        // code of the requested component
+        var module = await JSRuntime.InvokeAsync<IJSObjectReference>(
+            "import",
+        "./js/scripts.js");
+        // From the module JS object, we can call the
+        // getRandomBook() method
+        var randomBook = await module.InvokeAsync<Book>("getRandomBook");
+        Console.WriteLine($"randomBook: {randomBook.Title}\n{randomBook.AuthorName}\n{randomBook.Price}");
         Navigation.LocationChanged += Navigation_LocationChanged;
 
         _books = await BooksService.GetAllBooksAsync();

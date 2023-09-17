@@ -1,4 +1,6 @@
-﻿<nav class="navbar navbar-expand-lg">
+﻿@inject IJSRuntime JSRuntime
+
+<nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
         <a href="" class="navbar-brand">BooksStore</a>
         <button class="navbar-toggler"
@@ -24,9 +26,23 @@
                 </li>
             </ul>
         </div>
+        <div class="d-flex">
+            <button class="btn btn-outline-warning"
+            @onclick="ShowAlert">
+                Login
+            </button>
+        </div>
     </div>
 </nav>
 
 @code {
-
+    private async Task ShowAlertAsync()
+    {
+        await JSRuntime.InvokeVoidAsync("showAlert", "Unknown User");
+    }
+    private void ShowAlert()
+    {
+        var jsInProcess = (IJSInProcessRuntime)JSRuntime;
+        jsInProcess.InvokeVoid("showAlert", "Unknown user");
+    }
 }
