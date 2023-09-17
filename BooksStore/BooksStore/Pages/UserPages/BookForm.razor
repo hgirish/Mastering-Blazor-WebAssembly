@@ -1,0 +1,71 @@
+﻿@page "/book/form"
+
+<PageTitle>BooksStore | Add a new book</PageTitle>
+
+<div class="row">
+    <div class="col-6">
+        <h2>Add a new book</h2>
+        <EditForm Model="_book"
+            OnSubmit="HandleBookFormSubmission">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="form-group mt-1">
+                <label>Title</label>
+                <InputText
+                   @bind-Value="@_book.Title"
+                    class="form-control"
+                     />
+                     <ValidationMessage For="() => _book.Title" />
+            </div>
+            <div class="form-group mt-1">
+                <label>Description</label>
+                <InputTextArea 
+               @bind-Value="@_book.Description"
+                       class="form-control"
+                        />
+                <ValidationMessage For="() => _book.Description" />
+            </div>
+            <div class="form-group mt-1">
+                <label>Number of pages</label>
+                <InputNumber TValue="int"
+               @bind-Value="@_book.PagesCount"
+                       class="form-control"
+                        />
+                <ValidationMessage For="() => _book.PagesCount" />
+            </div>
+            <div class="form-group mt-1">
+                <label>Author</label>
+                <InputText 
+               @bind-Value="@_book.Author"
+                       class="form-control"
+                        />
+                <ValidationMessage For="() => _book.Author" />
+            </div>
+            <div class="form-group mt-1">
+                <label>Price</label>
+                <InputNumber TValue="decimal"
+               @bind-Value="@_book.Price"
+                       class="form-control"
+                        />
+                <ValidationMessage For="() => _book.Price" />
+            </div>
+            <div class="form-group mt-1">
+               <input type="submit" class="btn btn-success" value="Save" />
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+
+@code {
+    private SubmitBook _book = new();
+
+    private void HandleBookFormSubmission()
+    {
+        Console.WriteLine($"Book has been submitted successfully");
+        Console.WriteLine($"Title: {_book.Title}");
+        Console.WriteLine($"Author: {_book.Author}");
+        Console.WriteLine($"Pages Count: {_book.PagesCount}");
+        Console.WriteLine($"Price: {_book.Price}");
+    }
+}
