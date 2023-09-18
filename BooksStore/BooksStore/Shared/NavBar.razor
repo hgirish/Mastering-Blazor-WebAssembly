@@ -43,6 +43,7 @@
     private void ShowAlert()
     {
         var jsInProcess = (IJSInProcessRuntime)JSRuntime;
+        jsInProcess.InvokeVoid("callStaticCsharpMethod");
         jsInProcess.InvokeVoid("showAlert", "Unknown user");
     }
 }
