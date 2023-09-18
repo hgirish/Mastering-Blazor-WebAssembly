@@ -1,4 +1,7 @@
-﻿
+﻿@inject IJSRuntime JSRuntime
+
+@implements IDisposable
+
 <div class="grid-container">
     @if (Items != null && Items.Any())
     {
@@ -31,4 +34,22 @@
     public int ColumnsCount { get; set; } = 4;
 
     private int _columnWidth => 100 / ColumnsCount;
+
+    private DotNetObjectReference<DataListView<TItemType>>? _dotNetObjectReference;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _dotNetObjectReference = DotNetObjectReference.Create(this);
+
+        await JSRuntime.InvokeVoidAsync("triggerOnWindowResized", _dotNetObjectReference);
+    }
+    public void Dispose()
+    {
+        _dotNetObjectReference.Dispose();
+    }
+    [JSInvokable]
+    public void OnWindowResized(int width, int height)
+    {
+        Console.WriteLine($"New width {width} and the new height {height}");
+    }
 }

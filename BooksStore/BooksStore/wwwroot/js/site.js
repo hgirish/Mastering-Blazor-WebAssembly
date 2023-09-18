@@ -12,3 +12,13 @@ async function callStaticCsharpMethod() {
             console.error(error);
         })
 }
+
+function triggerOnWindowResized(dotnetObjRef) {
+    // Subscribe to the window.onresize event and
+    // trigger a method that will trigger the .NET
+    // method and pass the width and height as
+    // parameters to it
+    window.onresize = function () {
+        dotnetObjRef.invokeMethodAsync('OnWindowResized', window.innerWidth, window.innerHeight);
+    }
+}
