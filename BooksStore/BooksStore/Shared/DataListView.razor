@@ -45,7 +45,7 @@
     }
     public void Dispose()
     {
-        _dotNetObjectReference.Dispose();
+        _dotNetObjectReference?.Dispose();
     }
     [JSInvokable]
     public void OnWindowResized(int width, int height)

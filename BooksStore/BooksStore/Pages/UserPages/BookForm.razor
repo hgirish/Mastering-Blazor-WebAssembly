@@ -19,10 +19,7 @@
             </div>
             <div class="form-group mt-1">
                 <label>Description</label>
-                <InputTextArea 
-               @bind-Value="@_book.Description"
-                       class="form-control"
-                        />
+                <BlazorSimpleMde @ref="_simpleMde" />
                 <ValidationMessage For="() => _book.Description" />
             </div>
             <div class="form-group mt-1">
@@ -67,13 +64,17 @@
 @code {
     private SubmitBook _book = new();
     private TimeOnly _time = new TimeOnly(12, 30, 0);
+    private BlazorSimpleMde _simpleMde;
 
-    private void HandleBookFormSubmission()
+    private async void HandleBookFormSubmission()
     {
+        _book.Description = await _simpleMde.GetEditorValueAsync();
+
         Console.WriteLine($"Book has been submitted successfully");
         Console.WriteLine($"Title: {_book.Title}");
         Console.WriteLine($"Author: {_book.Author}");
         Console.WriteLine($"Pages Count: {_book.PagesCount}");
         Console.WriteLine($"Price: {_book.Price}");
+        Console.WriteLine($"Description: {_book.Description}");
     }
 }
