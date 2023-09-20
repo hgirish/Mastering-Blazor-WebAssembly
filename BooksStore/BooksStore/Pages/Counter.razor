@@ -1,5 +1,9 @@
 ﻿@page "/counter"
 
+@inject AppStateContainer AppStateContainer
+
+@layout UserLayout
+
 <PageTitle>Counter</PageTitle>
 
 <h1>Counter</h1>
@@ -20,6 +24,7 @@
     private void IncrementCount()
     {
         currentCount++;
+        AppStateContainer.UpdateCounter(currentCount);
     }
     private Dictionary<string, object> parameters = 
     new()

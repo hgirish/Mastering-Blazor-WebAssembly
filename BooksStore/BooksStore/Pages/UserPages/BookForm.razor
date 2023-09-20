@@ -1,4 +1,9 @@
 ﻿@page "/book/form"
+@using Blazored.LocalStorage;
+
+@inject ILocalStorageService LocalStorage
+
+@implements IDisposable
 
 <PageTitle>BooksStore | Add a new book</PageTitle>
 
@@ -65,8 +70,15 @@
     private SubmitBook _book = new();
     private TimeOnly _time = new TimeOnly(12, 30, 0);
     private BlazorSimpleMde _simpleMde;
+    private System.Timers.Timer _timer = new();
 
-    private async void HandleBookFormSubmission()
+    protected override async Task OnInitializedAsync()
+    {
+        await CheckSavedStateAsync();
+        SetupTimer();
+        
+    }
+    private async Task HandleBookFormSubmission()
     {
         _book.Description = await _simpleMde.GetEditorValueAsync();
 
@@ -76,5 +88,42 @@
         Console.WriteLine($"Pages Count: {_book.PagesCount}");
         Console.WriteLine($"Price: {_book.Price}");
         Console.WriteLine($"Description: {_book.Description}");
+        await ClearSavedStateAsync();
+    }
+
+    private async Task SaveFormStateAsync()
+    {
+        _book.Description = await _simpleMde.GetEditorValueAsync();
+        Console.WriteLine($"Description : {_book.Description}");
+        await LocalStorage.SetItemAsync("book", _book);
+    }
+
+    private async Task CheckSavedStateAsync()
+    {
+        if (await LocalStorage.ContainKeyAsync("book"))
+        {
+            _book = await LocalStorage.GetItemAsync<SubmitBook>("book");
+            Console.WriteLine($"_book.Description: {_book.Description}");
+            await _simpleMde.SetEditorValueAsync(_book.Description);
+        }
+    }
+    private async Task ClearSavedStateAsync()
+    {
+        await LocalStorage.RemoveItemAsync("book");
+    }
+    private void SetupTimer()
+    {
+        var second = 1000;
+        _timer.Interval = 10 * second;
+        _timer.Elapsed += async (sender, e) =>
+        {
+            await SaveFormStateAsync();
+        };
+        _timer.Start();
+    }
+    public void Dispose()
+    {
+        _timer.Stop();
+        _timer.Dispose();
     }
 }

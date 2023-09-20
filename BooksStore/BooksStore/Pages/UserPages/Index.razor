@@ -11,7 +11,7 @@
 
 <NavigationLock ConfirmExternalNavigation="true" />
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Index | Page @PageNumber</PageTitle>
 
 <h1>Hello, world!</h1>
 
@@ -37,6 +37,17 @@ Welcome to your new app.
     </ItemTemplate>
 </DataListView>
 
+<div class="mt-2">
+    <button class="btn btn-primary" @onclick="() =>  GoToPage(1)">
+        1
+    </button>
+    <button class="btn btn-primary" @onclick="() =>  GoToPage(2)">
+        2
+    </button>
+    <button class="btn btn-primary" @onclick="() =>  GoToPage(3)">
+        3
+    </button>
+</div>
 @*<BookCard Book="_nonExistent"></BookCard>*@
 <h3 class="mt-3">My Cart</h3>
 <ul>
@@ -76,6 +87,10 @@ Welcome to your new app.
     // private string? _backStyle ;
     private bool _isWelcomeModalOpen = false;
 
+    [Parameter]
+    [SupplyParameterFromQuery(Name ="pageNumber")]
+    public int PageNumber { get; set; }
+
     // private Book? _nonExistent;
     protected override async Task OnInitializedAsync()
     {
@@ -93,6 +108,13 @@ Welcome to your new app.
         Navigation.LocationChanged += Navigation_LocationChanged;
 
         _books = await BooksService.GetAllBooksAsync();
+    }
+    protected override void OnParametersSet()
+    {
+        if (PageNumber <= 0)
+        {
+            PageNumber = 1;
+        }
     }
     private Book? _firstBook
     {
@@ -116,5 +138,9 @@ Welcome to your new app.
     {
         Navigation.LocationChanged -= Navigation_LocationChanged;
     }
-
+    private void GoToPage(int pageNumber)
+    {
+        PageNumber = pageNumber;
+        Navigation.NavigateTo($"/?pageNumber={pageNumber}");
+    }
 }

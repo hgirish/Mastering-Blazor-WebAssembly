@@ -1,5 +1,8 @@
 ﻿@inject IJSRuntime JSRuntime
 
+@inject AppStateContainer AppStateContainer
+@implements IDisposable
+
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
         <a href="" class="navbar-brand">BooksStore</a>
@@ -19,7 +22,9 @@
                     <NavLink href="/"  class="nav-link">Home</NavLink>
                 </li>
                 <li class="nav-item">
-                    <NavLink href="/Counter" class="nav-link">Counter</NavLink>
+                    <NavLink href="/Counter" class="nav-link">
+                        Counter @(currentCount)
+                        </NavLink>
                 </li>
                 <li class="nav-item">
                     <NavLink href="/FetchData" class="nav-link">Fetch Data</NavLink>
@@ -36,6 +41,18 @@
 </nav>
 
 @code {
+    private int currentCount = 0;
+
+    protected override void OnInitialized()
+    {
+        currentCount = AppStateContainer.CurrentCounter;
+        AppStateContainer.OnCounterChanged += OnCounterChanged;
+    }
+    private void OnCounterChanged(int newCounter)
+    {
+        currentCount = newCounter;
+        StateHasChanged();
+    }
     private async Task ShowAlertAsync()
     {
         await JSRuntime.InvokeVoidAsync("showAlert", "Unknown User");
@@ -45,5 +62,9 @@
         var jsInProcess = (IJSInProcessRuntime)JSRuntime;
         jsInProcess.InvokeVoid("callStaticCsharpMethod");
         jsInProcess.InvokeVoid("showAlert", "Unknown user");
+    }
+    public void Dispose()
+    {
+        AppStateContainer.OnCounterChanged -= OnCounterChanged;
     }
 }
