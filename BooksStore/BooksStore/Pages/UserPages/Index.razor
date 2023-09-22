@@ -6,6 +6,7 @@
 @inject IBooksService BooksService
 @inject NavigationManager Navigation
 @inject IJSRuntime JSRuntime
+@inject HttpClient Http 
 
 @implements IDisposable
 
@@ -82,7 +83,7 @@ Welcome to your new app.
 
 
 @code {
-    private List<Book> _books = new List<Book>();
+    private List<Book>? _books = new List<Book>();
     private List<Book> _booksCart = new List<Book>();
     // private string? _backStyle ;
     private bool _isWelcomeModalOpen = false;
@@ -107,7 +108,7 @@ Welcome to your new app.
         Console.WriteLine($"randomBook: {randomBook.Title}\n{randomBook.AuthorName}\n{randomBook.Price}");
         Navigation.LocationChanged += Navigation_LocationChanged;
 
-        _books = await BooksService.GetAllBooksAsync();
+        _books = await GetBooksAsync();
     }
     protected override void OnParametersSet()
     {
@@ -142,5 +143,18 @@ Welcome to your new app.
     {
         PageNumber = pageNumber;
         Navigation.NavigateTo($"/?pageNumber={pageNumber}");
+    }
+    private async Task<List<Book>?> GetBooksAsync()
+    {
+        var response = await Http.GetAsync("/books");
+        if (response.IsSuccessStatusCode)
+        {
+            return await response.Content.ReadFromJsonAsync<List<Book>>();
+        }
+        else
+        {
+            var errorResponse = await response.Content.ReadFromJsonAsync<ApiErrorResponse>();
+            throw new Exception(errorResponse?.Message);
+        }
     }
 }

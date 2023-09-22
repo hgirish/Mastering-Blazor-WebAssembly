@@ -6,10 +6,10 @@ function initializeMarkdownEditor() {
 }
 
 function getMarkdownEditorValue() {
-    if (simplemde == null) {
-        console.log('simplemde null');
-        initializeMarkdownEditor();
-    }
+    //if (simplemde == null) {
+    //    console.log('simplemde null');
+    //    initializeMarkdownEditor();
+    //}
     if (simplemde != null) {
         console.log('simpleMde.value', simplemde.value())
         return simplemde.value();
@@ -17,12 +17,12 @@ function getMarkdownEditorValue() {
     return '';
 }
 function setMarkdownEditorValue(value) {
-    if (simplemde == null) {
-        console.log('simplemde null');
-        initializeMarkdownEditor();
-    }
+    //if (simplemde == null) {
+    //    console.log('simplemde null');
+    //    initializeMarkdownEditor();
+    //}
     if (simplemde != null) {
         console.log('simpleMde.value', value)
-        simplemde.value(value);
+        simplemde.value(value ?? '');
     }
 }

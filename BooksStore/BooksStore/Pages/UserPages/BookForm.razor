@@ -2,6 +2,8 @@
 @using Blazored.LocalStorage;
 
 @inject ILocalStorageService LocalStorage
+@inject HttpClient Http 
+@inject NavigationManager NavigationManager
 
 @implements IDisposable
 
@@ -24,7 +26,7 @@
             </div>
             <div class="form-group mt-1">
                 <label>Description</label>
-                <BlazorSimpleMde @ref="_simpleMde" />
+                <BlazorSimpleMde @ref="_simpleMde" Content="@_book?.Description" />
                 <ValidationMessage For="() => _book.Description" />
             </div>
             <div class="form-group mt-1">
@@ -76,19 +78,23 @@
     {
         await CheckSavedStateAsync();
         SetupTimer();
-        
+
     }
     private async Task HandleBookFormSubmission()
     {
         _book.Description = await _simpleMde.GetEditorValueAsync();
 
-        Console.WriteLine($"Book has been submitted successfully");
-        Console.WriteLine($"Title: {_book.Title}");
-        Console.WriteLine($"Author: {_book.Author}");
-        Console.WriteLine($"Pages Count: {_book.PagesCount}");
-        Console.WriteLine($"Price: {_book.Price}");
-        Console.WriteLine($"Description: {_book.Description}");
-        await ClearSavedStateAsync();
+        var response = await Http.PostAsJsonAsync("books", _book);
+        if (response.IsSuccessStatusCode)
+        {
+            await ClearSavedStateAsync();
+            NavigationManager.NavigateTo("/");
+        }
+        else
+        {
+            var error = await response.Content.ReadFromJsonAsync<ApiErrorResponse>();
+            Console.WriteLine(error);
+        }
     }
 
     private async Task SaveFormStateAsync()

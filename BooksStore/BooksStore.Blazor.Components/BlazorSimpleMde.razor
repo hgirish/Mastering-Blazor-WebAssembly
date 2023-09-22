@@ -19,7 +19,7 @@
             // JS function
             try
             {
-                if (Content != null && !string.IsNullOrWhiteSpace(Content))
+               // if (Content != null && !string.IsNullOrWhiteSpace(Content))
                 await JSRuntime.InvokeVoidAsync(
                     "setMarkdownEditorValue", Content
                 );
