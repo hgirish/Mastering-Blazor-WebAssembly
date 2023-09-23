@@ -2,8 +2,9 @@
 @using Blazored.LocalStorage;
 
 @inject ILocalStorageService LocalStorage
-@inject HttpClient Http 
+
 @inject NavigationManager NavigationManager
+@inject IBooksService BooksService
 
 @implements IDisposable
 
@@ -84,17 +85,11 @@
     {
         _book.Description = await _simpleMde.GetEditorValueAsync();
 
-        var response = await Http.PostAsJsonAsync("books", _book);
-        if (response.IsSuccessStatusCode)
-        {
+        await BooksService.AddBookAsync(_book);
+        
             await ClearSavedStateAsync();
             NavigationManager.NavigateTo("/");
-        }
-        else
-        {
-            var error = await response.Content.ReadFromJsonAsync<ApiErrorResponse>();
-            Console.WriteLine(error);
-        }
+        
     }
 
     private async Task SaveFormStateAsync()

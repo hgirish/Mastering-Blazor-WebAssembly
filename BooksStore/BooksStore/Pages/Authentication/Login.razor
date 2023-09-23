@@ -1,0 +1,54 @@
+﻿@page "/authentication/login"
+@using Blazored.LocalStorage;
+@layout UserLayout
+@inject IAuthenticationService AuthService
+@inject ILocalStorageService LocalStorage
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthStateProvider
+
+<PageTitle>Login to BooksStore</PageTitle>
+
+<h2>Welcome to BooksStore!</h2>
+<div class="row">
+    <dir class="col-sm-12 col-md-4">
+        <EditForm Model="_model"
+            OnValidSubmit="SubmitLoginFormAsync">
+            <DataAnnotationsValidator />
+            <div class="mb-3">
+                <label>Username</label>
+                <InputText @bind-Value="@_model.Username" class="form-control" />
+                <ValidationMessage For="@(() => _model.Username)" />
+            </div>
+            <div class="mb-3">
+                <label>Password</label>
+                <InputText type="password" 
+                    @bind-Value="@_model.Password" class="form-control" />
+                <ValidationMessage For="@(() => _model.Password)" />
+            </div>
+            <button type="submit" class="btn btn-primary">
+                Login
+            </button>
+        </EditForm>
+    </dir>
+</div>
+
+@code {
+    private LoginRequest _model = new();
+
+    private async Task SubmitLoginFormAsync()
+    {
+        try
+        {
+            var loginResult = await AuthService.LoginUserAsync(_model);
+            await LocalStorage.SetItemAsync("access_token", loginResult.AccessToken);
+            await AuthStateProvider.GetAuthenticationStateAsync();
+            Navigation.NavigateTo("/");
+        }
+        catch (Exception ex)
+        {
+            
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+}

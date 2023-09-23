@@ -6,7 +6,7 @@
 @inject IBooksService BooksService
 @inject NavigationManager Navigation
 @inject IJSRuntime JSRuntime
-@inject HttpClient Http 
+
 
 @implements IDisposable
 
@@ -108,7 +108,7 @@ Welcome to your new app.
         Console.WriteLine($"randomBook: {randomBook.Title}\n{randomBook.AuthorName}\n{randomBook.Price}");
         Navigation.LocationChanged += Navigation_LocationChanged;
 
-        _books = await GetBooksAsync();
+        _books = await BooksService.GetAllBooksAsync();
     }
     protected override void OnParametersSet()
     {
@@ -144,17 +144,5 @@ Welcome to your new app.
         PageNumber = pageNumber;
         Navigation.NavigateTo($"/?pageNumber={pageNumber}");
     }
-    private async Task<List<Book>?> GetBooksAsync()
-    {
-        var response = await Http.GetAsync("/books");
-        if (response.IsSuccessStatusCode)
-        {
-            return await response.Content.ReadFromJsonAsync<List<Book>>();
-        }
-        else
-        {
-            var errorResponse = await response.Content.ReadFromJsonAsync<ApiErrorResponse>();
-            throw new Exception(errorResponse?.Message);
-        }
-    }
+ 
 }

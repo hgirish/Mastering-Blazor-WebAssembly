@@ -31,6 +31,17 @@ public class LocalBooksService : IBooksService
             Description = "Learning Blazor from A to Z by John Smith"
         },
     };
+
+    public Task AddBookAsync(SubmitBook book)
+    {
+        _allBooks.Add(new Book
+        {
+            Title = book.Title,
+            Description = book.Description
+        });
+        return Task.FromResult(_allBooks);
+    }
+
     public Task<List<Book>> GetAllBooksAsync()
     {
         return Task.FromResult(_allBooks);
