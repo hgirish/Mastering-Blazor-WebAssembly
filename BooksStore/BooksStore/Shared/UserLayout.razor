@@ -3,9 +3,18 @@
 <NavBar />
 
 <main class="px-5 py-4">
-    @Body
+    <ErrorBoundary @ref="_errorBoundary">
+        <ChildContent>
+            @Body
+        </ChildContent>
+        <ErrorContent>
+            <h3>@context?.Message</h3>
+            <button class="btn btn-primary"
+            @onclick="() => _errorBoundary?.Recover()">Reload</button>
+        </ErrorContent>
+    </ErrorBoundary>    
 </main>
 
 @code {
-
+    private ErrorBoundary? _errorBoundary;
 }

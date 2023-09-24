@@ -24,6 +24,10 @@
     private void IncrementCount()
     {
         currentCount++;
+        if (currentCount > 5)
+        {
+            throw new Exception("Counter value must not exceed the value of 5");
+        }
         AppStateContainer.UpdateCounter(currentCount);
     }
     private Dictionary<string, object> parameters = 
