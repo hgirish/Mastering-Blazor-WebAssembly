@@ -1,4 +1,5 @@
-﻿using BooksStore.Models;
+﻿using BooksStore.Exceptions;
+using BooksStore.Models;
 using System.Net.Http.Json;
 
 namespace BooksStore.Services;
@@ -20,8 +21,16 @@ public class AuthenticationService : IAuthenticationService
         {
             return await response.Content.ReadFromJsonAsync<LoginResponse>();
         }
-        var error = await response.Content.ReadFromJsonAsync<ApiErrorResponse>();
-        await Console.Out.WriteLineAsync(error?.Message);
-        throw new Exception(error?.Message);
+        else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+        {
+            var error = await response.Content.ReadFromJsonAsync<ApiErrorResponse>();
+            throw new ApiResponseException(error);
+        }
+        else
+        {
+            throw new Exception("Oops! Something went wrong");
+        }
+       
+       
     }
 }

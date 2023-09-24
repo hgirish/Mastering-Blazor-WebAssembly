@@ -1,5 +1,6 @@
 ﻿using BooksStore.Api.Models;
 using BooksStore.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BooksStore.Api.Controllers;
@@ -22,7 +23,7 @@ public class BooksController : Controller
         var result = await _booksService.GetAllBooksAsync();
         return Ok(result.ToArray());
     }
-
+   // [Authorize(Roles ="Admin")]
     [ProducesResponseType(200, Type=typeof(Book))]
     [ProducesResponseType(400, Type=typeof(ApiErrorResponse))]
     [HttpPost]

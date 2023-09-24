@@ -1,5 +1,6 @@
 ﻿@page "/authentication/login"
 @using Blazored.LocalStorage;
+@using BooksStore.Exceptions;
 @layout UserLayout
 @inject IAuthenticationService AuthService
 @inject ILocalStorageService LocalStorage
@@ -28,15 +29,23 @@
             <button type="submit" class="btn btn-primary">
                 Login
             </button>
+            @if (!string.IsNullOrWhiteSpace(_errorMessage))
+            {
+                <div class="alert alert-danger my-2">@_errorMessage</div>
+            }
         </EditForm>
     </dir>
 </div>
 
 @code {
+    [CascadingParameter]
+    public ErrorHandler ErrorHandler { get; set; }
     private LoginRequest _model = new();
+    private string _errorMessage { get; set; } = string.Empty;
 
     private async Task SubmitLoginFormAsync()
     {
+        _errorMessage = string.Empty;
         try
         {
             var loginResult = await AuthService.LoginUserAsync(_model);
@@ -44,10 +53,14 @@
             await AuthStateProvider.GetAuthenticationStateAsync();
             Navigation.NavigateTo("/");
         }
+        catch (ApiResponseException ex)
+        {
+            _errorMessage = ex.Message;
+        }
         catch (Exception ex)
         {
-            
-            Console.WriteLine(ex.Message);
+
+            await ErrorHandler.HandleExceptionAsync(ex);
         }
     }
 

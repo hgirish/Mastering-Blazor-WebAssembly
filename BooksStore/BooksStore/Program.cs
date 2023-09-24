@@ -5,6 +5,7 @@ using BooksStore.Services;
 using Blazored.LocalStorage;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Components.Authorization;
+using System.Security.Claims;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -15,6 +16,8 @@ builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
 //builder.Services.AddScoped(sp => new HttpClient { 
 //    BaseAddress = new Uri(builder.Configuration["ApiUrl"]) });
+builder.Services.AddScoped<AuthorizationMessageHandler>();
+
 builder.Services.AddHttpClient("BooksStore.API", httpClient =>
 httpClient.BaseAddress = new Uri(builder.Configuration["ApiUrl"]))
     .AddHttpMessageHandler<DemoLoggingHandler>();
@@ -29,7 +32,13 @@ builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddSingleton<AppStateContainer>();
 
-builder.Services.AddAuthorizationCore();
+builder.Services.AddAuthorizationCore(options =>
+{
+    options.AddPolicy("UK_Customer", policy =>
+    {
+        policy.RequireClaim(ClaimTypes.Country, "UK");
+    });
+});
 builder.Services.AddScoped<AuthenticationStateProvider, JwtAuthenticationStateProvider>();
 
 await builder.Build().RunAsync();

@@ -8,9 +8,20 @@
     <p>Publishing Date: @Book?.PublishingDate</p>
     @if (WithButton)
     {
-        <button class="main-button"
-        @onclick="AddToCart" @onclick:stopPropagation="true"
-        >Add to Cart</button>
+        <AuthorizeView Policy="UK_Customer">
+            <Authorized>
+                <button class="main-button"
+                @onclick="AddToCart" @onclick:stopPropagation="true">
+                    Add to Cart
+                </button>
+            </Authorized>
+            <NotAuthorized>
+                <p class="text-center">
+                    Books only available for sale in UK for the time being.
+                </p>
+            </NotAuthorized>
+        </AuthorizeView>
+       
     }
     
 </div>

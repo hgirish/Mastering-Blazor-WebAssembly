@@ -1,0 +1,25 @@
+﻿@using Blazored.LocalStorage
+@inject ILocalStorageService LocalStorage
+@inject AuthenticationStateProvider AuthStateProvider
+<AuthorizeView>
+    <Authorized>
+        <div class="d-flex align-items-center">
+            <p class="my-0">
+                Hello @context.User.FindFirst(ClaimTypes.GivenName)?.Value
+            </p>
+            <button class="btn btn-danger mx-2" @onclick="LogoutAsync">Logout</button>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <a class="btn btn-outline-primary"         
+        href="/authentication/login">Login</a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private async Task LogoutAsync()
+    {
+        await LocalStorage.RemoveItemAsync("access_token");
+        await AuthStateProvider.GetAuthenticationStateAsync();
+    }
+}

@@ -1,16 +1,11 @@
-﻿<CascadingAuthenticationState>
+﻿<ErrorHandler>
+<CascadingAuthenticationState>
 <Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
         <AuthorizeRouteView RouteData="@routeData" 
             DefaultLayout="@typeof(UserLayout)">
             <NotAuthorized>
-                    <h3>
-                        You don't have the permissions to access
-                        this page
-                    </h3>
-                    <br />
-                    <a href="authentication/login"
-                       class="btn btn-primary">Login</a>
+                   <RedirectToLogin />
             </NotAuthorized>
         </AuthorizeRouteView>
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
@@ -30,4 +25,5 @@
         </LayoutView>
     </NotFound>
 </Router>
-</CascadingAuthenticationState>
+    </CascadingAuthenticationState>
+</ErrorHandler>
