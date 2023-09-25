@@ -27,6 +27,9 @@
 </div>
 
 @code {
+    private string _oldBookId = string.Empty;
+    private bool _shouldRender = false;
+
     [Parameter][EditorRequired]
     public Book? Book { get; set; }
     [Parameter]
@@ -66,9 +69,14 @@
     {
         if (Book == null)
             throw new ArgumentNullException(nameof(Book));
+        if (Book.Id.Equals(_oldBookId))
+        {
+            _oldBookId = Book.Id;
+            _shouldRender = true;
+        }
         else
         {
-           // Console.WriteLine(Book.Title);
+            _shouldRender = false;
         }
     }
 
@@ -76,5 +84,13 @@
     {
         var url = $"/book/{Book!.Id}";
         Navigation.NavigateTo(url);
+    }
+    protected override void OnAfterRender(bool firstRender)
+    {
+        Console.WriteLine($"BookCard redered for book: {Book?.Title}");
+    }
+    protected override bool ShouldRender()
+    {
+        return _shouldRender;
     }
 }
