@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BooksStore", "BooksStore\Bo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BooksStore.Blazor.Components", "BooksStore.Blazor.Components\BooksStore.Blazor.Components.csproj", "{6463B71D-8774-40E4-B4A5-B566C19A60CA}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BooksStore.Tests", "BooksStore.Tests\BooksStore.Tests.csproj", "{42170A56-129E-42E0-99F8-2A3BFC1BCA47}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{6463B71D-8774-40E4-B4A5-B566C19A60CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6463B71D-8774-40E4-B4A5-B566C19A60CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6463B71D-8774-40E4-B4A5-B566C19A60CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42170A56-129E-42E0-99F8-2A3BFC1BCA47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42170A56-129E-42E0-99F8-2A3BFC1BCA47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42170A56-129E-42E0-99F8-2A3BFC1BCA47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42170A56-129E-42E0-99F8-2A3BFC1BCA47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
