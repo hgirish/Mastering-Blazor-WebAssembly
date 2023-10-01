@@ -1,4 +1,6 @@
-﻿namespace BooksStore.Api.Models;
+﻿using Microsoft.AspNetCore.Mvc.ViewEngines;
+
+namespace BooksStore.Api.Models;
 
 public class Book
 {
@@ -11,4 +13,5 @@ public class Book
     public DateTime PublishingDate { get; set; }
     public string? CoverImageUrl { get; set; }
     public string? Category { get; set; }
+    public List<Review> Reviews { get; set; } = new();
 }

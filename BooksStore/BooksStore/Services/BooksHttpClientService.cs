@@ -22,7 +22,17 @@ public class BooksHttpClientService: IBooksService
         }
     }
 
-    public async Task<List<Book>> GetAllBooksAsync()
+	public async Task AddReviewAsync(string bookId, AddBookReviewRequest review)
+	{
+        var response = await _httpClient.PostAsJsonAsync($"books/review/{bookId}", review);
+        if (!response.IsSuccessStatusCode)
+        {
+            var error = await response.Content.ReadFromJsonAsync<ApiErrorResponse>();
+            Console.WriteLine(error);
+        }
+	}
+
+	public async Task<List<Book>> GetAllBooksAsync()
     {
         var response = await _httpClient.GetAsync("books");
         if (response.IsSuccessStatusCode)
@@ -41,11 +51,14 @@ public class BooksHttpClientService: IBooksService
         var response = await _httpClient.GetAsync($"books/{id}");
         if (response.IsSuccessStatusCode)
         {
-            return await response.Content.ReadFromJsonAsync<Book>();
+            var book =  await response.Content.ReadFromJsonAsync<Book>();
+            Console.WriteLine(book?.Title);
+            return book;
         }
         else
         {
             var errorResponse = await response.Content.ReadFromJsonAsync<ApiErrorResponse>();
+             Console.WriteLine(errorResponse?.Message);
             throw new Exception(errorResponse?.Message);
         }
     }

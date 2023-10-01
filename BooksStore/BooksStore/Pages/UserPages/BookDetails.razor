@@ -6,21 +6,50 @@
 <h2>@_book?.Title</h2>
 <p>@_book?.Description</p>
 <ul>
-    <li>Date: @_book?.PublishingDate</li>
+    <li>Price: $@_book?.Price</li>
+    <li>Pages: @_book?.PagesCount</li>
     <li>Author: @_book?.AuthorName</li>
+    <li>Publishing date: @_book?.PublishingDate</li>
 </ul>
+<hr />
+<div class="row">
+    <div class="col-lg-4 col-sm-12 col-md-6">
+        <BookRatingForm OnRatingSubmitted="LoadBookAsync" BookId="@BookId" />
+        <hr />
+        <h3>Ratings and reviews</h3>
+        @if (_book?.Reviews != null && _book.Reviews.Any())
+        {
+            @foreach (var review in _book.Reviews)
+            {
+                <div class="mb-3">
+                    <Rating StarCount="review.Rating" IsReadOnly="true" />
+                    <p class="mt-2">@review.Description</p>
+                    <hr />
+                    </div>
+            }
+        }
+        else
+        {
+            <p>No reviews available yet!</p>
+        }
+    </div>
+</div>
 @code {
     [Parameter]
     public string? BookId { get; set; }
     private Book? _book = null;
     protected override async Task OnInitializedAsync()
     {
-        _book = await BooksService.GetBookByIdAsync(BookId);
+        await LoadBookAsync();
     }
 
     protected override void OnParametersSet()
     {
         Console.WriteLine($"The book id is {BookId}");
+    }
+    private async Task LoadBookAsync()
+    {
+        _book = await BooksService.GetBookByIdAsync(BookId);
     }
 
 }

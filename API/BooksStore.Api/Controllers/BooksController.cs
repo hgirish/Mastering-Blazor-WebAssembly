@@ -32,4 +32,24 @@ public class BooksController : Controller
         var book = await _booksService.AddBookAsync(model);
         return Ok(book);
     }
+    [ProducesResponseType(200, Type = typeof(Book))]
+    [ProducesResponseType(400, Type = typeof(ApiErrorResponse))]
+    [HttpGet("{id}")]
+    public async Task<IActionResult> Get(string id)
+    {
+        // Validate the model 
+        var result = await _booksService.GetByIdAsync(id);
+        if (result == null)
+            return NotFound();
+        return Ok(result);
+    }
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400, Type = typeof(ApiErrorResponse))]    
+    [HttpPost("review/{bookId}")]
+    public async Task<IActionResult> AddReview(string bookId, [FromBody] AddBookReviewRequest model)
+    {
+        // Validate the model 
+        await _booksService.AddReviewAsync(bookId, model);
+        return Ok();
+    }
 }

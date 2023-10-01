@@ -20,4 +20,6 @@ public class Book
     public string? CoverImageUrl { get; set; }
     [JsonPropertyName("pagesCount")]
     public int PagesCount { get; set; }
+    [JsonPropertyName("reviews")]
+    public List<BookReview>? Reviews { get; set; }
 }

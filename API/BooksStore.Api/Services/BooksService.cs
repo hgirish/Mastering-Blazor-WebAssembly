@@ -1,4 +1,5 @@
-﻿using BooksStore.Api.Models;
+﻿using BooksStore.Api.Exceptions;
+using BooksStore.Api.Models;
 
 namespace BooksStore.Api.Services;
 
@@ -56,4 +57,31 @@ public class BooksService
         return Task.FromResult(book);
     }
 
+    public Task<Book?> GetByIdAsync(string id)
+    {
+        return Task.FromResult(_allBooks.FirstOrDefault(i => i.Id == id));
+    }
+
+    public Task AddReviewAsync(string bookId, AddBookReviewRequest review)
+    {
+        var book = _allBooks.FirstOrDefault(b => b.Id == bookId);
+        if (book == null)
+        {
+            throw new DomainException("Book not found");
+        }
+        Console.WriteLine(book.Title);
+        if (book.Reviews == null)
+        {
+            book.Reviews = new List<Review>();
+        }
+        Console.WriteLine(book.Reviews.Count);
+        book.Reviews.Add(new()
+        {
+            Description = review.Description,
+            Rating = review.Rating,
+            Id = Guid.NewGuid().ToString(),
+        });
+
+        return Task.CompletedTask;
+    }
 }

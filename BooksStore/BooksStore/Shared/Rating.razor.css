@@ -1,0 +1,13 @@
+﻿.star {
+    color: #ccc;
+    cursor: pointer;
+    font-size: 2rem;
+}
+
+.selected {
+    color: gold;
+}
+
+.read-only {
+    cursor: default;
+}

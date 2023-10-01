@@ -42,6 +42,11 @@ public class LocalBooksService : IBooksService
         return Task.FromResult(_allBooks);
     }
 
+    public Task AddReviewAsync(string bookId, AddBookReviewRequest review)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<List<Book>> GetAllBooksAsync()
     {
         return Task.FromResult(_allBooks);
