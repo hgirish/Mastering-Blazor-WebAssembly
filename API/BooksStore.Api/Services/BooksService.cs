@@ -5,6 +5,10 @@ namespace BooksStore.Api.Services;
 
 public class BooksService
 {
+    public BooksService(IWebHostEnvironment env)
+    {
+        _env = env;
+    }
     static List<Book> _allBooks = new List<Book>
         {
                  new Book
@@ -35,6 +39,7 @@ public class BooksService
                      PagesCount = 250,
                  }
         };
+    private readonly IWebHostEnvironment _env;
 
     public Task<List<Book>> GetAllBooksAsync()
     {
@@ -83,5 +88,24 @@ public class BooksService
         });
 
         return Task.CompletedTask;
+    }
+
+    public async Task SetCoverAsync(string bookId, IFormFile file)
+    {
+        var book = _allBooks.FirstOrDefault(b => b.Id == bookId);
+        if (book == null)
+        {
+            throw new DomainException("Book not found");
+        }
+        var fileName = $"{bookId}-{Guid.NewGuid().ToString()}.jpg";
+        var filePath = Path.Combine(_env.ContentRootPath,
+            "wwwroot", "images", fileName);
+        using (var stream = new FileStream(filePath, FileMode.Create))
+        {
+            await file.CopyToAsync(stream);
+        }
+        book.CoverImageUrl = $"/images/{fileName}";
+
+
     }
 }

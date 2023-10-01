@@ -58,4 +58,9 @@ public class LocalBooksService : IBooksService
         return Task.FromResult(book);
         
     }
+
+	public Task UploadBookCoverAsync(string bookId, Stream stream, string fileName)
+	{
+		throw new NotImplementedException();
+	}
 }

@@ -62,4 +62,24 @@ public class BooksHttpClientService: IBooksService
             throw new Exception(errorResponse?.Message);
         }
     }
+
+	public async Task UploadBookCoverAsync(string bookId, Stream stream, string fileName)
+	{
+        using var content = new MultipartFormDataContent();
+        using var fileContent = new StreamContent(stream);
+        fileContent.Headers.ContentDisposition = 
+            new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data")
+        {
+            Name = "file",
+            FileName = fileName
+        };
+        content.Add(fileContent);
+        var response = await _httpClient.PostAsync($"/books/{bookId}/cover", content);
+        if (!response.IsSuccessStatusCode)
+        {
+            var error = await response.Content.ReadFromJsonAsync<ApiErrorResponse>();
+            Console.WriteLine(error?.Message);
+        }
+
+	}
 }

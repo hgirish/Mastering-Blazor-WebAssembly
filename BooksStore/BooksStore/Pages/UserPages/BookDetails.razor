@@ -1,5 +1,6 @@
 ﻿@page "/book/{bookId}"
 @inject IBooksService BooksService
+@inject IConfiguration Configuration
 
 <PageTitle>Book Details | @_book?.Title</PageTitle>
 
@@ -11,6 +12,10 @@
     <li>Author: @_book?.AuthorName</li>
     <li>Publishing date: @_book?.PublishingDate</li>
 </ul>
+@if (_book?.CoverImageUrl != null)
+{
+    <img class="cover" src="@(apiUrl + "/" +  _book.CoverImageUrl)" />
+}
 <hr />
 <div class="row">
     <div class="col-lg-4 col-sm-12 col-md-6">
@@ -38,8 +43,10 @@
     [Parameter]
     public string? BookId { get; set; }
     private Book? _book = null;
+    private string apiUrl;
     protected override async Task OnInitializedAsync()
     {
+        apiUrl = Configuration["ApiUrl"];
         await LoadBookAsync();
     }
 

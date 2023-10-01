@@ -52,4 +52,14 @@ public class BooksController : Controller
         await _booksService.AddReviewAsync(bookId, model);
         return Ok();
     }
+
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400, Type = typeof(ApiErrorResponse))]
+    [HttpPost("{bookId}/cover")]
+    public async Task<IActionResult> UploadCover(string bookId, [FromForm] IFormFile file)
+    {
+        // Validate the model 
+        await _booksService.SetCoverAsync(bookId, file);
+        return Ok();
+    }
 }
